@@ -61,7 +61,7 @@ require VIEWS . '/incs/header.php' ?>
                         $altText = ucfirst($altText);
                         ?>
                         <figure class="home-image-gallery">
-                            <img src="<?php echo htmlspecialchars($imagePath); ?>"
+                            <img src="<?= asset('<?php echo htmlspecialchars($imagePath); ?>"') ?>"
                                  alt="<?php echo htmlspecialchars($altText); ?>"
                                  loading="lazy"/>
                         </figure>
