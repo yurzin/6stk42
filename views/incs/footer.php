@@ -16,7 +16,7 @@
     </div>
 </footer>
 </div>
-<script src="<?php echo APP_URL . '/js/zoomImage.js'; ?>"></script>
-<script src="<?php echo APP_URL . '/js/bootstrap.bundle.min.js'; ?>"></script>
+<script src="<?= asset('js/zoomImage.js') ?>"></script>
+<script src="<?= asset('js/bootstrap.bundle.min.js') ?>"></script>
 </body>
 </html>
