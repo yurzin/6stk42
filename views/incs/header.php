@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="<?php echo $metaDescription ?? 'Аренда офисов в центре Кемерова, ул. Кузбасская, 33А'; ?>">
     <title><?php echo $pageTitle ?? 'Аренда офисов в центре Кемерова'; ?></title>
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?= asset('/css/main.css') ?>">
+    <link rel="stylesheet" href="<?= asset('/css/bootstrap.min.css') ?>">
     <link rel="icon" href="/favicon.ico">
 </head>
 
@@ -26,22 +26,22 @@
                     <nav>
                         <ul class="primary-menu">
                             <li class="<?php echo ($currentPage ?? '') === 'home' ? 'active' : ''; ?>">
-                                <a href="/">Главная</a>
+                                <a href="<?= url() ?>">Главная</a>
                             </li>
                             <li class="<?php echo ($currentPage ?? '') === 'floor1' ? 'active' : ''; ?>">
-                                <a href="/?page=floor1">Первый этаж</a>
+                                <a href=="<?= url('/?page=floor1') ?>">Первый этаж</a>
                             </li>
                             <li class="<?php echo ($currentPage ?? '') === 'floor2' ? 'active' : ''; ?>">
-                                <a href="/?page=floor2">Второй этаж</a>
+                                <a href=="<?= url('/?page=floor2') ?>">Второй этаж</a>
                             </li>
                             <li class="<?php echo ($currentPage ?? '') === 'floor3' ? 'active' : ''; ?>">
-                                <a href="/?page=floor3">Третий этаж</a>
+                                <a href=="<?= url('/?page=floor3') ?>">Третий этаж</a>
                             </li>
                             <li class="<?php echo ($currentPage ?? '') === 'schema' ? 'active' : ''; ?>">
-                                <a href="/?page=schema">Схема расположения</a>
+                                <a href=="<?= url('/?page=schema') ?>">Схема расположения</a>
                             </li>
                             <li class="<?php echo ($currentPage ?? '') === 'contact' ? 'active' : ''; ?>">
-                                <a href="/?page=send-message">Отправить сообщение</a>
+                                <a href=="<?= url('/?page=send-message') ?>">Отправить сообщение</a>
                             </li>
                         </ul>
                     </nav>

@@ -13,8 +13,7 @@ require VIEWS . '/incs/header.php' ?>
                     <h3>Офисный центр на ул. Кузбасской, 33А</h3>
                 </div>
                 <figure class="home-image-gallery">
-                    <img src="img/title_img2.jpg"
-                         alt="Трехэтажное офисное здание"/>
+                    <img src="<?= asset('img/title_img2.jpg') ?>" alt="Трехэтажное офисное здание"/>
                 </figure>
             </div>
         </div>
