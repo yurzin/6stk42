@@ -22,7 +22,7 @@ if (!empty($imageFiles)):
         $altText = ucfirst($altText);
         ?>
         <figure class="home-image-gallery">
-            <img src="<?php echo htmlspecialchars($imagePath); ?>"
+            <img src="<?= asset(htmlspecialchars($imagePath)) ?>"
                  alt="<?php echo htmlspecialchars($altText); ?>"
                  loading="lazy"/>
         </figure>
