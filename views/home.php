@@ -50,8 +50,9 @@ require VIEWS . '/incs/header.php' ?>
                 }
 
                 // Если изображения найдены, показываем их
-                if (!empty($imageFiles)):
-                    foreach ($imageFiles as $imageFile):
+                if (!empty($imageFiles)): ?>
+                    <?php foreach ($imageFiles as $imageFile): ?>
+                        <?php
                         $imagePath = '/img/block/' . $imageFile;
                         $altText = pathinfo($imageFile, PATHINFO_FILENAME);
                         $altText = str_replace(['_', '-'], ' ', $altText);
@@ -62,9 +63,12 @@ require VIEWS . '/incs/header.php' ?>
                                  alt="<?php echo htmlspecialchars($altText); ?>"
                                  loading="lazy"/>
                         </figure>
-                    <?php
-                    endforeach; endif;
-                ?>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="no-images-message">
+                        <p>Изображения не найдены</p>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
