@@ -3,7 +3,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require VENDOR . '/autoload.php';
+require ROOT . '/vendor/autoload.php';
 
 // Генерация CSRF-токена если его нет
 if (!isset($_SESSION['csrf_token'])) {
@@ -70,17 +70,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 // Настройки SMTP
                 $mail->isSMTP();
-                $mail->Host       = getenv('SMTP_HOST');
+                $mail->Host       =  $_ENV['SMTP_HOST'];
                 $mail->SMTPAuth   = true;
-                $mail->Username   = getenv('SMTP_USERNAME');
-                $mail->Password   = getenv('SMTP_PASSWORD');
+                $mail->Username   =  $_ENV['SMTP_USERNAME'];
+                $mail->Password   =  $_ENV['SMTP_PASSWORD'];
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-                $mail->Port       = getenv('SMTP_PORT');
+                $mail->Port       =  $_ENV['SMTP_PORT'];
                 $mail->CharSet    = 'UTF-8';
 
                 // Отправитель и получатель
-                $mail->setFrom(getenv('MAIL_FROM'), 'vse42.ru | Аренда');
-                $mail->addAddress(getenv('MAIL_TO'), 'Получатель');
+                $mail->setFrom( address: $_ENV['MAIL_FROM'], name: 'vse42.ru | Аренда');
+                $mail->addAddress( $_ENV['MAIL_TO'], 'Получатель');
                 $mail->addReplyTo($email, $name);
 
                 // Содержимое письма

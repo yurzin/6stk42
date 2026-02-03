@@ -1,10 +1,10 @@
 <?php
 
 define("ROOT", dirname(__DIR__));
-define("WWW", ROOT . '/public');
-define("CONFIG", ROOT . '/config');
-define("VIEWS", ROOT . '/views');
-define("VENDOR", ROOT . '/vendor');
+const WWW = ROOT . '/public';
+const CONFIG = ROOT . '/config';
+const VIEWS = ROOT . '/views';
+const VENDOR = ROOT . '/vendor';
 
 function load_env($path): void
 {
