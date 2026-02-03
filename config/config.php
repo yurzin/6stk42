@@ -60,7 +60,13 @@ function asset($path): string
 function url($path = ''): string
 {
     $path = ltrim($path, '/');
-    return BASE_PATH . ($path ? '/' . $path : ($path === '' ? '' : '/'));
+
+    // Если путь пустой, возвращаем корень
+    if ($path === '') {
+        return BASE_PATH ?: '/';
+    }
+
+    return BASE_PATH . '/' . $path;
 }
 
 function redirect($path = ''): void

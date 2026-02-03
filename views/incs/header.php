@@ -27,22 +27,22 @@
         <div class="bottom-header">
             <nav>
                 <ul class="primary-menu">
-                    <li class="<?php echo ($currentPage ?? '') === 'home' ? 'active' : ''; ?>">
+                    <li class="<?php echo $currentPage === 'home' ? 'active' : ''; ?>">
                         <a href="<?= url() ?>">Главная</a>
                     </li>
-                    <li class="<?php echo ($currentPage ?? '') === 'floor1' ? 'active' : ''; ?>">
+                    <li class="<?php echo $currentPage === 'floor1' ? 'active' : ''; ?>">
                         <a href="<?= url('/?page=floor1') ?>">Первый этаж</a>
                     </li>
-                    <li class="<?php echo ($currentPage ?? '') === 'floor2' ? 'active' : ''; ?>">
+                    <li class="<?php echo $currentPage === 'floor2' ? 'active' : ''; ?>">
                         <a href="<?= url('/?page=floor2') ?>">Второй этаж</a>
                     </li>
-                    <li class="<?php echo ($currentPage ?? '') === 'floor3' ? 'active' : ''; ?>">
+                    <li class="<?php echo $currentPage === 'floor3' ? 'active' : ''; ?>">
                         <a href="<?= url('/?page=floor3') ?>">Третий этаж</a>
                     </li>
-                    <li class="<?php echo ($currentPage ?? '') === 'schema' ? 'active' : ''; ?>">
+                    <li class="<?php echo $currentPage === 'schema' ? 'active' : ''; ?>">
                         <a href="<?= url('/?page=schema') ?>">Схема расположения</a>
                     </li>
-                    <li class="<?php echo ($currentPage ?? '') === 'send-message' ? 'active' : ''; ?>">
+                    <li class="<?php echo $currentPage === 'send-message' ? 'active' : ''; ?>">
                         <a href="<?= url('/?page=send-message') ?>">Отправить сообщение</a>
                     </li>
                 </ul>
