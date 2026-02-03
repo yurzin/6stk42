@@ -9,6 +9,12 @@ if (session_status() === PHP_SESSION_NONE) {
  */
 require dirname(__DIR__) . '/config/config.php';
 
+
+require ROOT . '/vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(ROOT);
+$dotenv->load();
+
 require CONFIG . '/routes.php';
 
 // Получаем параметр страницы из URL

@@ -1,15 +1,11 @@
 <?php
 
 define("ROOT", dirname(__DIR__));
-const WWW = ROOT . '/public';
-const CONFIG = ROOT . '/config';
-const APP = '/app';
-const VIEWS = APP . '/views';
-const VENDOR = APP . '/vendor';
+define("WWW", ROOT . '/public');
+define("CONFIG", ROOT . '/config');
+define("VIEWS", ROOT . '/views');
+define("VENDOR", ROOT . '/vendor');
 
-define('APP_URL', $_ENV['APP_URL'] ?? 'http://localhost:8080');
-
-// Простой парсер .env
 function load_env($path): void
 {
     if (!file_exists($path)) {
@@ -18,35 +14,36 @@ function load_env($path): void
 
     $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     foreach ($lines as $line) {
-        if (strpos(trim($line), '#') === 0) {
+        $line = trim($line);
+        if ($line === '' || strpos($line, '#') === 0) {
+            continue;
+        }
+
+        if (strpos($line, '=') === false) {
             continue;
         }
 
         list($name, $value) = explode('=', $line, 2);
         $name = trim($name);
-        $value = trim($value);
+        $value = trim($value, '"\'');
 
-        if (!array_key_exists($name, $_ENV)) {
-            putenv("$name=$value");
-            $_ENV[$name] = $value;
-        }
+        // ИСПРАВЛЕНИЕ: убрали проверку array_key_exists
+        // Теперь всегда перезаписываем значения из .env
+        $_ENV[$name] = $value;
+        $_SERVER[$name] = $value;
     }
 }
 
-// Загружаем .env
-$env_file = WWW . '/../.env';
-if (file_exists(WWW . '/../.env.local')) {
-    $env_file = WWW . '/../.env.local';
+$env_file = ROOT . '/.env';
+if (file_exists(ROOT . '/.env.local')) {
+    $env_file = ROOT . '/.env.local';
 }
+
 load_env($env_file);
 
-// Получаем значения из окружения
-$base_path = getenv('BASE_PATH') ?: '';
-$app_url = getenv('APP_URL') ?: 'http://localhost:8080';
-
-define('BASE_PATH', $base_path);
-define('BASE_URL', $app_url);
-define('APP_ENV', getenv('APP_ENV') ?: 'local');
+define('BASE_PATH', $_ENV['BASE_PATH'] ?? '');
+define('BASE_URL', $_ENV['APP_URL'] ?? 'http://localhost:8080');
+define('APP_ENV', $_ENV['APP_ENV'] ?? 'local');
 
 function base_url($path = ''): string
 {
@@ -57,33 +54,33 @@ function base_url($path = ''): string
 function asset($path): string
 {
     $path = ltrim($path, '/');
-    if (BASE_PATH) {
-        return BASE_PATH . '/' . $path;
-    }
-    return '/' . $path;
+    return BASE_PATH ? BASE_PATH . '/' . $path : '/' . $path;
 }
 
 function url($path = ''): string
 {
     $path = ltrim($path, '/');
-    if (BASE_PATH) {
-        return BASE_PATH . ($path ? '/' . $path : '');
-    }
-    return '/' . ($path ?: '');
+    return BASE_PATH . ($path ? '/' . $path : ($path === '' ? '' : '/'));
 }
 
-function redirect($path = '') {
-    header('Location: ' . url($path));
+function redirect($path = ''): void
+{
+    if (filter_var($path, FILTER_VALIDATE_URL)) {
+        http_response_code(400);
+        die('Invalid redirect');
+    }
+
+    header('Location: ' . url($path), true, 302);
     exit;
 }
 
-function current_path() {
-    $uri = $_SERVER['REQUEST_URI'];
-    if (($pos = strpos($uri, '?')) !== false) {
-        $uri = substr($uri, 0, $pos);
-    }
+function current_path(): string
+{
+    $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?? '/';
+
     if (BASE_PATH && strpos($uri, BASE_PATH) === 0) {
         $uri = substr($uri, strlen(BASE_PATH));
     }
+
     return $uri ?: '/';
 }
