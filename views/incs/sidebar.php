@@ -31,19 +31,16 @@ if (!empty($imageFiles)):
 else:
     // Если изображений нет, показываем заглушки
     $placeholders = [
-            'Помещение 1',
-            'Помещение 2',
-            'Помещение 3',
-            'Помещение 4',
-            'Помещение 5',
-            'Коридор',
-            'Входная зона',
-            'Санузел'
+            '/img/stub.jpg',
+            '/img/stub.jpg',
+            '/img/stub.jpg',
+            '/img/stub.jpg',
+            '/img/stub.jpg'
     ];
     foreach ($placeholders as $placeholder):
         ?>
         <figure>
-            <img src="https://via.placeholder.com/400x300/34495e/ffffff?text=<?php echo urlencode($placeholder); ?>"
+            <img src="<?php echo urlencode($placeholder); ?>"
                  alt="<?php echo htmlspecialchars($placeholder); ?>"/>
         </figure>
     <?php
