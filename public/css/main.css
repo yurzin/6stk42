@@ -15,6 +15,10 @@ figure {
     margin: 0;
 }
 
+.home-image-gallery {
+    margin-bottom: 0;
+}
+
 .home-image-gallery img {
     border-radius: 8px;
 }
@@ -36,24 +40,20 @@ figure {
     padding: 10px 0;
 }
 
-.gc-container {
-    max-width: 1140px;
-    margin: 0 auto;
-    padding: 0 20px;
+.header-title {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
 }
 
-.site-identity {
+.site-title {
     text-align: center;
-    padding: 0 0 20px;
-}
-
-.site-title a {
     color: white;
     text-decoration: none;
-    font-size: 3.5em;
+    font-size: 3em;
     font-weight: 300;
     text-transform: uppercase;
-    letter-spacing: 3px;
+    letter-spacing: 5px;
 }
 
 .site-description {
@@ -91,6 +91,7 @@ figure {
 .primary-menu .active a {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 5px;
+    color: white;
 }
 
 .main-content-area-wrap {
@@ -116,7 +117,7 @@ figure {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0, 0, 0, 0.8);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -136,19 +137,20 @@ figure {
 }
 
 .content-title h3 {
-    width: max-content;
     font-size: 1.5em;
+    width: fit-content;
     color: #2c3e50;
     margin-bottom: 15px;
     padding-bottom: 10px;
     border-bottom: 2px solid #ecf0f1;
 }
 
-.sidebar-title  h3 {
-    font-size: 1.5em;
-    margin-bottom: 15px;
+.sidebar-title h3 {
+    width: fit-content;
+    font-size: 1.2em;
+    margin-bottom: 20px;
     padding-bottom: 10px;
-    border-bottom: 2px solid #ecf0f1;
+    /*border-bottom: 2px solid #ecf0f1;*/
 }
 
 .content img {
@@ -174,7 +176,7 @@ figure {
     background: #ecf0f1;
     padding: 20px;
     /*border-radius: 10px;*/
-    margin: 35px;
+    margin: 20px 35px;
 }
 
 .block-list li {
@@ -189,7 +191,8 @@ figure {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
-    margin-top: 55px;
+    margin-top: 5px;
+    margin-bottom: 20px;
 }
 
 .block-gallery {
@@ -212,7 +215,7 @@ figure {
 
 
 .block-gallery-home {
-    margin: 0 38px 40px;
+    margin: 0 38px 20px;
 }
 
 .footer {
@@ -258,14 +261,23 @@ figure {
 }
 
 .form-wrap {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px 38px 20px 20px;
+    margin: 10px 38px 10px 0;
+    padding: 10px 20px 10px 20px;
+    background: #2c3e50;
+    border-radius: 8px;
 }
 
-.form-control-wrap {
-    display: block;
+.form-wrap label {
+    color: white;
 }
+
+.form-control-wrap input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/*
 
 .form-control {
     width: 100%;
@@ -274,7 +286,7 @@ figure {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-}
+}*/
 
 .textarea {
     resize: vertical;
@@ -334,12 +346,37 @@ figure {
     font-size: 14px;
 }
 
+.your-accept-label a {
+    color: white;
+    text-decoration: none;
+    font-weight: 300;
+    transition: 1s;
+}
 
-@media (max-width: 768px) {
+.your-accept-label a:hover {
+    opacity: 95%;
+    transition: 1s;
+}
+
+.form-control-input {
+    margin-bottom: 10px;
+}
+
+.form-control-button {
+    display: flex;
+    justify-content: center;
+}
+
+
+@media (max-width: 1200px) {
+    .site-title {
+        line-height: 1.2;
+    }
+
     .primary-menu {
-        flex-direction: column;
+        /*flex-direction: column;*/
         align-items: center;
-        gap: 10px;
+        gap: 0;
     }
 
     .page-title h1 {
@@ -352,8 +389,62 @@ figure {
 }
 
 @media (max-width: 992px) {
+    .content {
+        padding-left: 0;
+    }
+
+    .primary-menu {
+        padding-left: 0;
+    }
+
+    .block-image {
+        padding: 0;
+    }
+
+    .block-list, .block-gallery-home {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .block-gallery {
+        padding-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .site-title {
+        font-size: 2.5em;
+    }
+
+    .form-wrap {
+        margin-right: 0;
+    }
+
     .col-lg-4,
     .col-lg-8 {
         flex: 0 0 100%;
+    }
+
+    @media (max-width: 576px) {
+        .col-lg-4,
+        .col-lg-8 {
+            flex: 0 0 100%;
+        }
+
+        .block-list li {
+            font-size: 1.2em;
+        }
+
+        .content-title h3 {
+            font-size: 1.2em;
+        }
+
+        .contacts-info {
+            padding-left: 25px;
+            padding-right: 25px;
+        }
+
+        .contacts-info a {
+            white-space: nowrap;
+        }
     }
 }

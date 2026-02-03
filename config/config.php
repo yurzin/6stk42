@@ -2,7 +2,6 @@
 
 define("ROOT", dirname(__DIR__));
 const WWW = ROOT . '/public';
-const CORE = ROOT . '/core';
 const CONFIG = ROOT . '/config';
 const APP = '/app';
 const VIEWS = APP . '/views';
@@ -10,43 +9,80 @@ const VENDOR = APP . '/vendor';
 
 define('APP_URL', $_ENV['APP_URL'] ?? 'http://localhost:8080');
 
-// Определяем базовый путь
-define('BASE_PATH', '/arenda');
-define('BASE_URL', 'http://yurzin.com/arenda');
+// Простой парсер .env
+function load_env($path): void
+{
+    if (!file_exists($path)) {
+        return;
+    }
 
-// Функция для генерации URL
-function base_url($path = '')
+    $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos(trim($line), '#') === 0) {
+            continue;
+        }
+
+        list($name, $value) = explode('=', $line, 2);
+        $name = trim($name);
+        $value = trim($value);
+
+        if (!array_key_exists($name, $_ENV)) {
+            putenv("$name=$value");
+            $_ENV[$name] = $value;
+        }
+    }
+}
+
+// Загружаем .env
+$env_file = WWW . '/../.env';
+if (file_exists(WWW . '/../.env.local')) {
+    $env_file = WWW . '/../.env.local';
+}
+load_env($env_file);
+
+// Получаем значения из окружения
+$base_path = getenv('BASE_PATH') ?: '';
+$app_url = getenv('APP_URL') ?: 'http://localhost:8080';
+
+define('BASE_PATH', $base_path);
+define('BASE_URL', $app_url);
+define('APP_ENV', getenv('APP_ENV') ?: 'local');
+
+function base_url($path = ''): string
 {
     $path = ltrim($path, '/');
     return BASE_URL . ($path ? '/' . $path : '');
 }
 
-// Функция для путей к статическим файлам
-function asset($path)
+function asset($path): string
 {
     $path = ltrim($path, '/');
-    return BASE_PATH . '/' . $path;
+    if (BASE_PATH) {
+        return BASE_PATH . '/' . $path;
+    }
+    return '/' . $path;
 }
 
-// Функция для внутренних ссылок
-function url($path = '')
+function url($path = ''): string
 {
     $path = ltrim($path, '/');
-    return BASE_PATH . ($path ? '/' . $path : '');
+    if (BASE_PATH) {
+        return BASE_PATH . ($path ? '/' . $path : '');
+    }
+    return '/' . ($path ?: '');
 }
 
-// Функция для редиректов
-function redirect($path = '')
-{
+function redirect($path = '') {
     header('Location: ' . url($path));
     exit;
 }
 
-// Функция для получения текущего URL без BASE_PATH
-function current_path()
-{
+function current_path() {
     $uri = $_SERVER['REQUEST_URI'];
-    if (strpos($uri, BASE_PATH) === 0) {
+    if (($pos = strpos($uri, '?')) !== false) {
+        $uri = substr($uri, 0, $pos);
+    }
+    if (BASE_PATH && strpos($uri, BASE_PATH) === 0) {
         $uri = substr($uri, strlen(BASE_PATH));
     }
     return $uri ?: '/';

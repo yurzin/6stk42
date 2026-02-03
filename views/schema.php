@@ -1,9 +1,8 @@
 <?php
-$pageTitle = 'Первый этаж – Аренда офисов в центре Кемерова';
-$metaDescription = 'Изображения офисов на первом этаже. Офисное здание г. Кемерово, ул. Кузбасская, 33А';
-$currentPage = $page;
+$pageTitle = 'Схема расположения.';
+$metaDescription = 'Схема расположения офисов.';
 
-include __DIR__ . '/incs/header.php';
+include VIEWS . '/incs/header.php';
 
 ?>
 
@@ -16,10 +15,10 @@ include __DIR__ . '/incs/header.php';
                 <div class="sidebar-title">
                     <h3>Схема расположения кабинетов</h3>
                 <div class="block-gallery">
-                    <?php include __DIR__ . '/incs/sidebar.php' ?>
+                    <?php include VIEWS . '/incs/sidebar.php' ?>
                 </div>
             </div>
         </div>
     </div>
 
-<?php include __DIR__ . '/incs/footer.php'; ?>
+<?php include VIEWS . '/incs/footer.php'; ?>

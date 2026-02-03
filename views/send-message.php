@@ -1,7 +1,6 @@
 <?php
-$pageTitle = 'Первый этаж – Аренда офисов в центре Кемерова';
-$metaDescription = 'Изображения офисов на первом этаже. Офисное здание г. Кемерово, ул. Кузбасская, 33А';
-$currentPage = $page;
+$pageTitle = 'Отправить сообщение.';
+$metaDescription = 'Форма обратной связи для аренды офисов.';
 
 include VIEWS . '/incs/header.php';
 
@@ -11,16 +10,16 @@ include CONFIG . '/process-form.php';
 
     <div class="container mt-5">
         <div class="row">
-            <div class="col-lg-8 l-4">
+            <div class="col-lg-8 col-md-12 col-sm-12 l-4">
                 <?php include VIEWS . '/incs/content.php' ?>
             </div>
-            <div class="col-lg-4 r-4">
+            <div class="col-lg-4 col-md-12 col-sm-12 r-4">
                 <div class="sidebar-title">
                     <h3>Форма обратной связи</h3>
                 </div>
-
                 <div class="form-wrap">
                     <form method="POST" action="">
+                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'] ?? ''; ?>">
 
                         <?php if ($success): ?>
                             <div class="response-output success" role="alert">
@@ -34,123 +33,105 @@ include CONFIG . '/process-form.php';
                             </div>
                         <?php endif; ?>
 
-                        <p>
-                            <label>
-                                Ваше имя<br/>
-                                <span class="form-control-wrap" data-name="your-name">
-                    <input
-                            size="40"
-                            maxlength="400"
-                            class="form-control text validates-as-required"
-                            autocomplete="name"
-                            aria-required="true"
-                            aria-invalid="<?php echo isset($errors['name']) ? 'true' : 'false'; ?>"
-                            value="<?php echo htmlspecialchars($name); ?>"
-                            type="text"
-                            name="your-name"
-                    />
-                </span>
-                                <?php if (isset($errors['name'])): ?>
+                        <div class="form-control-input">
+                            <label for="your-name">Ваше имя</label>
+                                <input
+                                        id="your-name"
+                                        size="40"
+                                        class="form-control"
+                                        autocomplete="name"
+                                        aria-required="true"
+                                        aria-invalid="<?php echo isset($errors['name']) ? 'true' : 'false'; ?>"
+                                        value="<?php echo htmlspecialchars($name); ?>"
+                                        type="text"
+                                        name="your-name"
+                                />
+
+                            <div><?php if (isset($errors['name'])): ?>
                                     <span class="error"><?php echo $errors['name']; ?></span>
                                 <?php endif; ?>
-                            </label>
-                        </p>
+                            </div>
+                        </div>
 
-                        <p>
-                            <label>
-                                Ваш телефон<br/>
-                                <span class="form-control-wrap your-phone">
-                    <input
-                            type="text"
-                            value="<?php echo htmlspecialchars($phone); ?>"
-                            name="your-phone"
-                            class="form-control mask validates-as-required wpcf7mf-mask"
-                            size="40"
-                            aria-required="true"
-                            aria-invalid="<?php echo isset($errors['phone']) ? 'true' : 'false'; ?>"
-                            placeholder="+7-___-___-____"
-                            data-mask="+7-___-___-____"
-                    />
-                </span>
-                                <?php if (isset($errors['phone'])): ?>
+                        <div class="form-control-input">
+                            <label for="your-phone">Ваш телефон</label>
+                            <input
+                                        id="your-phone"
+                                        type="text"
+                                        value="<?php echo htmlspecialchars($phone); ?>"
+                                        name="your-phone"
+                                        class="form-control"
+                                        size="40"
+                                        aria-required="true"
+                                        aria-invalid="<?php echo isset($errors['phone']) ? 'true' : 'false'; ?>"
+                                        placeholder="+7-___-___-____"
+                                        data-mask="+7-___-___-____"
+                                />
+                            <div><?php if (isset($errors['phone'])): ?>
                                     <span class="error"><?php echo $errors['phone']; ?></span>
                                 <?php endif; ?>
-                            </label>
-                        </p>
+                            </div>
+                        </div>
 
-                        <p>
-                            <label>
-                                Ваш e-mail<br/>
-                                <span class="form-control-wrap" data-name="your-email">
-                    <input
-                            size="40"
-                            maxlength="400"
-                            class="form-control email validates-as-required text validates-as-email"
-                            autocomplete="email"
-                            aria-required="true"
-                            aria-invalid="<?php echo isset($errors['email']) ? 'true' : 'false'; ?>"
-                            value="<?php echo htmlspecialchars($email); ?>"
-                            type="email"
-                            name="your-email"
-                    />
-                </span>
-                                <?php if (isset($errors['email'])): ?>
+                        <div class="form-control-input">
+                            <label for="your-email">Ваш e-mail</label>
+                            <input
+                                        id="your-email"
+                                        size="40"
+                                        class="form-control email"
+                                        autocomplete="email"
+                                        aria-required="true"
+                                        aria-invalid="<?php echo isset($errors['email']) ? 'true' : 'false'; ?>"
+                                        value="<?php echo htmlspecialchars($email); ?>"
+                                        type="email"
+                                        name="your-email"
+                                />
+                            <div><?php if (isset($errors['email'])): ?>
                                     <span class="error"><?php echo $errors['email']; ?></span>
                                 <?php endif; ?>
-                            </label>
-                        </p>
+                            </div>
+                        </div>
 
-                        <p>
-                            <label>
-                                Ваше сообщение<br/>
-                                <span class="form-control-wrap" data-name="your-message">
-                    <textarea
-                            cols="40"
-                            rows="10"
-                            maxlength="2000"
-                            class="form-control textarea validates-as-required"
-                            aria-required="true"
-                            aria-invalid="<?php echo isset($errors['message']) ? 'true' : 'false'; ?>"
-                            name="your-message"
-                    ><?php echo htmlspecialchars($message); ?></textarea>
-                </span>
-                                <?php if (isset($errors['message'])): ?>
+                        <div class="form-control-input">
+                            <label for="your-message">Ваше сообщение</label>
+                            <textarea
+                                        id="your-message"
+                                        cols="50"
+                                        rows="10"
+                                        class="form-control"
+                                        aria-required="true"
+                                        aria-invalid="<?php echo isset($errors['message']) ? 'true' : 'false'; ?>"
+                                        name="your-message"
+                                ><?php echo htmlspecialchars($message); ?></textarea>
+                            <div><?php if (isset($errors['message'])): ?>
                                     <span class="error"><?php echo $errors['message']; ?></span>
                                 <?php endif; ?>
-                            </label>
-                        </p>
+                            </div>
+                        </div>
 
-                        <p>
-            <span class="form-control-wrap" data-name="accept-this-1">
-                <span class="form-control acceptance">
-                    <span class="list-item">
-                        <label>
+                        <div class="form-control-input">
+                        <label for="your-accept"></label>
                             <input
+                                    id="your-accept"
                                     type="checkbox"
-                                    name="accept-this-1"
+                                    name="your-accept"
                                     value="1"
                                     aria-invalid="<?php echo isset($errors['accept']) ? 'true' : 'false'; ?>"
                             />
-                            <span class="list-item-label">
+                            <span class="your-accept-label">
                                 <a href="/?page=privacy-policy">Нажимая на кнопку, я даю согласие на обработку персональных данных и подтверждаю ознакомление с политикой конфиденциальности.</a>
                             </span>
-                        </label>
-                    </span>
-                </span>
-            </span>
-                            <?php if (isset($errors['accept'])): ?>
+                        </div>
+                        <div><?php if (isset($errors['accept'])): ?>
                                 <span class="error"><?php echo $errors['accept']; ?></span>
-                            <?php endif; ?>
-                        </p>
-
-                        <p>
-                            <input
-                                    class="form-control submit has-spinner"
+                            <?php endif; ?></div>
+                        <div class="form-control-button">
+                        <input
+                                    class="btn btn-primary"
                                     type="submit"
                                     value="Отправить"
                             />
-                        </p>
-
+                        </div>
                     </form>
                 </div>
             </div>
@@ -178,4 +159,4 @@ include CONFIG . '/process-form.php';
         });
     </script>
 
-<?php include __DIR__ . '/incs/footer.php'; ?>
+<?php include VIEWS . '/incs/footer.php'; ?>

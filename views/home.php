@@ -1,13 +1,10 @@
 <?php
-$pageTitle = 'Аренда офисов в центре Кемерова – (ул. Кузбасская, 33А)';
-$metaDescription = 'Аренда офисов в центре Кемерова, ул. Кузбасская, 33А. Удобное расположение. Центр города. Транспортная доступность.';
-$currentPage = 'home';
 
 require VIEWS . '/incs/header.php' ?>
 
-<div class="container mt-5">
+<div class="container mt-lg-5 mt-md-2 mt-2">
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-12 col-md-12 col-sm-12">
             <div class="block-image">
                 <div class="content-title">
                     <h3>Офисный центр на ул. Кузбасской, 33А</h3>
@@ -19,7 +16,7 @@ require VIEWS . '/incs/header.php' ?>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-12 col-md-12 col-sm-12">
             <div class="block-list">
                 <ul>
                     <li>Удобное расположение (непосредственная близость к центру города), отличная транспортная

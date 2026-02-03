@@ -1,9 +1,7 @@
 <footer class="footer" role="contentinfo">
     <div class="contacts-info">
         <p>
-            <!-- Добавлен aria-label для ясности -->
             <span class="phone-footer" aria-label="Контактные телефоны">Контактные телефоны:</span>
-            <!-- Добавлена микроразметка для телефона -->
             <a href="tel:+79235670201">+7-923-567-02-01</a>,
             <a href="tel:+73842670201">+7 (3842) 67-02-01</a>
         </p>
