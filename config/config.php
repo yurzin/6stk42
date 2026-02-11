@@ -27,8 +27,7 @@ function load_env($path): void
         $name = trim($name);
         $value = trim($value, '"\'');
 
-        // ИСПРАВЛЕНИЕ: убрали проверку array_key_exists
-        // Теперь всегда перезаписываем значения из .env
+        // Перезаписываем значения из .env
         $_ENV[$name] = $value;
         $_SERVER[$name] = $value;
     }
