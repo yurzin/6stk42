@@ -1,5 +1,4 @@
 .env
-.env.local
 vendor/
 composer.lock
 .DS_Store
