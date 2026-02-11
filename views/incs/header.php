@@ -24,9 +24,14 @@
         <div class="header-title">
             <span class="site-title">Аренда офисов в центре Кемерова</span>
         </div>
-        <div class="bottom-header">
-            <nav>
-                <ul class="primary-menu">
+        <nav class="navbar navbar-expand-sm navbar-light justify-content-center position-static">
+            <!-- Кнопка бургер-меню -->
+            <button class="navbar-toggler bg-white me-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Переключить навигацию">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="bottom-header collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav primary-menu">
                     <li class="<?php echo $currentPage === 'home' ? 'active' : ''; ?>">
                         <a href="<?= url() ?>">Главная</a>
                     </li>
@@ -46,6 +51,5 @@
                         <a href="<?= url('/?page=send-message') ?>">Отправить сообщение</a>
                     </li>
                 </ul>
-            </nav>
-        </div>
+        </nav>
     </header>
