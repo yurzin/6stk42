@@ -4,6 +4,15 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 require ROOT . '/vendor/autoload.php';
+require CONFIG . '/rate-limiter.php';
+
+// Инициализация Rate Limiter
+$rateLimiter = new RateLimiter(
+    maxAttempts: 3,      // 3 попытки
+    decayMinutes: 15     // за 15 минут
+);
+
+$limiterKey = RateLimiter::key('contact-form');
 
 // Генерация CSRF-токена если его нет
 if (!isset($_SESSION['csrf_token'])) {
@@ -18,10 +27,31 @@ $success = false;
 // Обработка формы при отправке
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // Проверка CSRF-токена
-    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+    // 1. ПРОВЕРКА HONEYPOT (ловушка для ботов)
+    if (!empty($_POST['website'])) {
+        error_log('Honeypot triggered for IP: ' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'));
+        // Делаем вид что всё ОК, но ничего не отправляем
+        $success = true;
+        $name = $phone = $email = $message = '';
+        usleep(random_int(100000, 300000));
+        // Останавливаем дальнейшую обработку
+    }
+    // 2. ПРОВЕРКА RATE LIMIT
+    elseif ($rateLimiter->tooManyAttempts($limiterKey)) {
+        $waitTime = ceil($rateLimiter->availableIn($limiterKey) / 60);
+        $errors['general'] = "Слишком много попыток отправки. Попробуйте через {$waitTime} мин.";
+        error_log("Rate limit exceeded for IP: " . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'));
+        usleep(random_int(100000, 300000));
+    }
+    // 3. CSRF проверка
+    elseif (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        $rateLimiter->hit($limiterKey);
         $errors['general'] = 'Ошибка безопасности. Обновите страницу и попробуйте снова.';
-    } else {
+        error_log('CSRF attack attempt from IP: ' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'));
+        usleep(random_int(100000, 300000));
+    }
+    // 4. Валидация и отправка
+    else {
         // Получение и очистка данных
         $name = trim($_POST['your-name'] ?? '');
         $phone = trim($_POST['your-phone'] ?? '');
@@ -29,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = trim($_POST['your-message'] ?? '');
         $accept = isset($_POST['your-accept']);
 
-        // Валидация
+        // Валидация имени
         if (empty($name)) {
             $errors['name'] = 'Имя обязательно для заполнения';
         } elseif (mb_strlen($name, 'UTF-8') < 5 || mb_strlen($name, 'UTF-8') > 50) {
@@ -40,47 +70,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($phone)) {
             $errors['phone'] = 'Телефон обязателен для заполнения';
         } else {
-            // Убираем все нецифровые символы кроме +
-            $cleanPhone = preg_replace('/[^\d+]/', '', $phone);
-            if (!preg_match('/^\+7\d{10}$/', $cleanPhone) && !preg_match('/^8\d{10}$/', $cleanPhone)) {
-                $errors['phone'] = 'Некорректный номер телефона. Пример: +7-912-345-67-89';
+            $cleanPhone = preg_replace('/[^\d]/', '', $phone);
+            if (strlen($cleanPhone) !== 11 || ($cleanPhone[0] !== '7' && $cleanPhone[0] !== '8')) {
+                $errors['phone'] = 'Некорректный номер телефона';
             }
         }
 
+        // Валидация email
         if (empty($email)) {
             $errors['email'] = 'Email обязателен для заполнения';
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors['email'] = 'Некорректный email';
         }
 
+        // Валидация сообщения
         if (empty($message)) {
             $errors['message'] = 'Сообщение обязательно для заполнения';
         } elseif (mb_strlen($message, 'UTF-8') < 50 || mb_strlen($message, 'UTF-8') > 255) {
             $errors['message'] = 'Сообщение должно содержать от 50 до 255 символов';
         }
 
+        // Проверка согласия
         if (!$accept) {
             $errors['accept'] = 'Необходимо согласие на обработку данных';
         }
 
-        // Если нет ошибок, отправляем письмо
-        if (empty($errors)) {
+        // Если есть ошибки валидации
+        if (!empty($errors)) {
+            $rateLimiter->hit($limiterKey);
+            usleep(random_int(100000, 300000));
+        }
+        // Если всё ОК - отправляем
+        else {
             $mail = new PHPMailer(true);
 
             try {
                 // Настройки SMTP
                 $mail->isSMTP();
-                $mail->Host       =  $_ENV['SMTP_HOST'];
+                $mail->Host       = $_ENV['SMTP_HOST'];
                 $mail->SMTPAuth   = true;
-                $mail->Username   =  $_ENV['SMTP_USERNAME'];
-                $mail->Password   =  $_ENV['SMTP_PASSWORD'];
+                $mail->Username   = $_ENV['SMTP_USERNAME'];
+                $mail->Password   = $_ENV['SMTP_PASSWORD'];
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-                $mail->Port       =  $_ENV['SMTP_PORT'];
+                $mail->Port       = $_ENV['SMTP_PORT'];
                 $mail->CharSet    = 'UTF-8';
 
                 // Отправитель и получатель
-                $mail->setFrom( address: $_ENV['MAIL_FROM'], name: 'vse42.ru | Аренда');
-                $mail->addAddress( $_ENV['MAIL_TO'], 'Получатель');
+                $mail->setFrom($_ENV['MAIL_FROM'], 'vse42.ru | Аренда');
+                $mail->addAddress($_ENV['MAIL_TO'], 'Получатель');
                 $mail->addReplyTo($email, $name);
 
                 // Содержимое письма
@@ -124,15 +161,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $name = $phone = $email = $message = '';
                     // Регенерируем CSRF-токен для предотвращения повторной отправки
                     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+                    // Сбрасываем счётчик после успешной отправки
+                    $rateLimiter->clear($limiterKey);
                 }
 
             } catch (Exception $e) {
-                // Для отладки - показываем реальную ошибку
-                $errors['general'] = 'Ошибка при отправке сообщения: ' . $e->getMessage();
-                // Или логируем
                 error_log('Mailer Error: ' . $e->getMessage());
                 error_log('SMTP Debug: ' . $mail->ErrorInfo);
+                $errors['general'] = 'Произошла ошибка при отправке. Попробуйте позже.';
+                // Считаем неудачную попытку
+                $rateLimiter->hit($limiterKey);
             }
+
+            // Задержка ВСЕГДА (успех или неудача)
+            usleep(random_int(100000, 300000));
         }
     }
+}
+
+// Периодическая очистка устаревших файлов (1% вероятность)
+if (random_int(1, 100) === 1) {
+    $rateLimiter->cleanup();
 }
