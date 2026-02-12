@@ -15,7 +15,7 @@
     <title><?php echo $pageTitle . ' Аренда офисов в центре Кемерова'; ?></title>
     <link rel="stylesheet" href="<?= asset('/css/main.css') ?>">
     <link rel="stylesheet" href="<?= asset('/css/bootstrap.min.css') ?>">
-    <link rel="icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.svg">
 </head>
 
 <body>
