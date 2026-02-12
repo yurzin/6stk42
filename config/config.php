@@ -70,11 +70,15 @@ function url($path = ''): string
 
 function redirect($path = ''): void
 {
-    if (filter_var($path, FILTER_VALIDATE_URL)) {
+    // Запрещаем абсолютные URL и схемы
+    if (filter_var($path, FILTER_VALIDATE_URL) ||
+        str_contains($path, '://') ||
+        str_starts_with($path, '//')) {
         http_response_code(400);
         die('Invalid redirect');
     }
 
+    $path = ltrim($path, '/');
     header('Location: ' . url($path), true, 302);
     exit;
 }
