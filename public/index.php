@@ -1,6 +1,22 @@
 <?php
+header('X-Frame-Options: DENY');
+header('X-Content-Type-Options: nosniff');
+header('X-XSS-Protection: 1; mode=block');
+header('Referrer-Policy: strict-origin-when-cross-origin');
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';");
+
 if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_httponly', 1);
+    ini_set('session.cookie_secure', 1);  // Только для HTTPS
+    ini_set('session.cookie_samesite', 'Strict');
+    ini_set('session.use_strict_mode', 1);
     session_start();
+
+    // Регенерация ID сессии для предотвращения fixation
+    if (!isset($_SESSION['initiated'])) {
+        session_regenerate_id(true);
+        $_SESSION['initiated'] = true;
+    }
 }
 /** @var  $routes array
  * Точка входа в приложение
@@ -48,11 +64,24 @@ switch ($page) {
 }
 
 if (array_key_exists($page, $routes)) {
-    if (file_exists(VIEWS . '/'.$routes[$page])) {
-        include VIEWS . '/'.$routes[$page];
+    $viewsDir = realpath(VIEWS);
+    $filePath = realpath(VIEWS . '/' . $routes[$page]);
+
+    // Проверяем что:
+    // 1. realpath успешно разрешил путь (не null)
+    // 2. Файл находится строго внутри VIEWS директории
+    // 3. Файл существует (доп. проверка)
+    if ($filePath !== false &&
+        str_starts_with($filePath, $viewsDir . DIRECTORY_SEPARATOR) &&
+        is_file($filePath)) {
+        include $filePath;
     } else {
-        include VIEWS . '/home.php';
+        // Логируем попытку доступа к запрещённому файлу
+        error_log("Security: Attempted to access invalid file path for page: {$page}");
+        http_response_code(404);
+        include VIEWS . '/404.php';
     }
 } else {
+    http_response_code(404);
     include VIEWS . '/404.php';
 }
