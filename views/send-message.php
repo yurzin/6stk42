@@ -125,6 +125,20 @@ include CONFIG . '/process-form.php';
                         <div><?php if (isset($errors['accept'])): ?>
                                 <span class="error"><?php echo $errors['accept']; ?></span>
                             <?php endif; ?></div>
+                        <div>
+                        <!-- Добавьте Honeypot поле в форму (ПЕРЕД кнопкой отправки) -->
+                            <label>
+                                <input
+                                        type="text"
+                                        name="website"
+                                        value=""
+                                        style="position: absolute; left: -9999px; width: 1px; height: 1px;"
+                                        tabindex="-1"
+                                        autocomplete="off"
+                                        aria-hidden="true"
+                                />
+                            </label>
+                        </div>
                         <div class="form-control-button">
                         <input
                                     class="btn btn-primary"
