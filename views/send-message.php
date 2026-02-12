@@ -126,7 +126,7 @@ include CONFIG . '/process-form.php';
                                 <span class="error"><?php echo $errors['accept']; ?></span>
                             <?php endif; ?></div>
                         <div>
-                        <!-- Добавьте Honeypot поле в форму (ПЕРЕД кнопкой отправки) -->
+                        <!-- Скрытое Honeypot поле для ботов -->
                             <label>
                                 <input
                                         type="text"
