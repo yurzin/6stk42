@@ -3,7 +3,10 @@
 define("ROOT", dirname(__DIR__));
 const WWW = ROOT . '/public';
 const CONFIG = ROOT . '/config';
-const VIEWS = ROOT . '/views';
+const APP = ROOT . '/app';
+const CONTROLLERS = APP . '/Controllers';
+
+const VIEWS = APP . '/Views';
 const VENDOR = ROOT . '/vendor';
 
 function load_env($path): void
@@ -92,4 +95,11 @@ function current_path(): string
     }
 
     return $uri ?: '/';
+}
+
+function abort()
+{
+    http_response_code(404);
+    include VIEWS . '/404.php';
+    die;
 }

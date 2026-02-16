@@ -1,11 +1,14 @@
 <?php
+/**
+ * @var $app
+ */
 
-$routes = [
-    'home' => 'home.php',
-    'floor1' => 'floor.php',
-    'floor2' => 'floor.php',
-    'floor3' => 'floor.php',
-    'schema' => 'schema.php',
-    'send-message' => 'send-message.php',
-    'privacy-policy' => 'privacy-policy.php'
-];
+use App\Controllers\MainController;
+
+$app->router->get('/', [MainController::class, 'index']);
+$app->router->get('/floor', [MainController::class, 'floor']);
+$app->router->get('/schema', [MainController::class, 'schema']);
+$app->router->get('/form-send-message', [MainController::class, 'formSendMessage']);
+$app->router->get('/privacy-policy', [MainController::class, 'privacyPolicy']);
+
+$app->run();

@@ -36,19 +36,19 @@
                         <a href="<?= url() ?>">Главная</a>
                     </li>
                     <li class="<?php echo $currentPage === 'floor1' ? 'active' : ''; ?>">
-                        <a href="<?= url('/?page=floor1') ?>">Первый этаж</a>
+                        <a href="<?= url('/floor?id=1') ?>">Первый этаж</a>
                     </li>
                     <li class="<?php echo $currentPage === 'floor2' ? 'active' : ''; ?>">
-                        <a href="<?= url('/?page=floor2') ?>">Второй этаж</a>
+                        <a href="<?= url('/floor?id=2') ?>">Второй этаж</a>
                     </li>
                     <li class="<?php echo $currentPage === 'floor3' ? 'active' : ''; ?>">
-                        <a href="<?= url('/?page=floor3') ?>">Третий этаж</a>
+                        <a href="<?= url('/floor?id=3') ?>">Третий этаж</a>
                     </li>
                     <li class="<?php echo $currentPage === 'schema' ? 'active' : ''; ?>">
-                        <a href="<?= url('/?page=schema') ?>">Схема расположения</a>
+                        <a href="<?= url('/schema') ?>">Схема расположения</a>
                     </li>
-                    <li class="<?php echo $currentPage === 'send-message' ? 'active' : ''; ?>">
-                        <a href="<?= url('/?page=send-message') ?>">Отправить сообщение</a>
+                    <li class="<?php echo $currentPage === 'form-send-message' ? 'active' : ''; ?>">
+                        <a href="<?= url('/form-send-message') ?>">Отправить сообщение</a>
                     </li>
                 </ul>
         </nav>
