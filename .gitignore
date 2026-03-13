@@ -1,6 +1,6 @@
 .env
-.env.local
-vendor/
+.env.localold
+backend/vendor/
 composer.lock
 .DS_Store
 *.log

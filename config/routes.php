@@ -3,12 +3,11 @@
  * @var $app
  */
 
-use App\Controllers\MainController;
+use App\Controllers\View\ApiMainController;
 
-$app->router->get('/', [MainController::class, 'index']);
-$app->router->get('/floor', [MainController::class, 'floor']);
-$app->router->get('/schema', [MainController::class, 'schema']);
-$app->router->get('/form-send-message', [MainController::class, 'formSendMessage']);
-$app->router->get('/privacy-policy', [MainController::class, 'privacyPolicy']);
+$app->router->get('/api/feed',        [ApiMainController::class, 'feed']);
+$app->router->get('/api/photos', [ApiMainController::class, 'photos']);
+$app->router->get('/api/videos', [ApiMainController::class, 'videos']);
+$app->router->get('/api/notes',  [ApiMainController::class, 'notes']);
 
 $app->run();

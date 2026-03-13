@@ -7,30 +7,26 @@ class Router
     protected array $routes = [];
     public array $route_params = [];
 
-
     public function __construct(
         protected Request $request,
-    )
+    ) {}
+
+    public function get(string $path, array|callable $callback): self
     {
+        return $this->addRoute('GET', $path, $callback);
     }
 
-    public function get($path, $callback): self
+    public function post(string $path, array|callable $callback): self
     {
-        $path = trim($path, '/');
-        $this->routes[] = [
-            'path' => "$path",
-            'callback' => $callback,
-            'method' => ['GET']
-        ];
-        return $this;
+        return $this->addRoute('POST', $path, $callback);
     }
 
     public function dispatch(): mixed
     {
-        $path = $this->request->getPath();
+        $path  = $this->request->getPath();
         $route = $this->matchRoute($path);
 
-        if (false === $route) {
+        if ($route === false) {
             abort();
         }
 
@@ -41,13 +37,34 @@ class Router
         return call_user_func($route['callback'], $this->request);
     }
 
-    protected function matchRoute($path): mixed
+    // ── private ────────────────────────────────────────────────────────────
+
+    private function addRoute(string $method, string $path, array|callable $callback): self
     {
+        // Нормализуем: убираем слеши с обоих концов, приводим к нижнему регистру
+        $path = strtolower(trim($path, '/'));
+
+        $this->routes[] = [
+            'path'     => $path,
+            'callback' => $callback,
+            'method'   => $method,
+        ];
+
+        return $this;
+    }
+
+    private function matchRoute(string $path): array|false
+    {
+        // Нормализуем входящий путь так же, как при регистрации
+        $path   = strtolower(trim($path, '/'));
+        $method = $this->request->getMethod();
+
         foreach ($this->routes as $route) {
-            if ($route['path'] === $path && in_array($this->request->getMethod(), $route['method'])) {
+            if ($route['path'] === $path && $route['method'] === $method) {
                 return $route;
             }
         }
+
         return false;
     }
 }

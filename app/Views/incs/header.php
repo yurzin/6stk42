@@ -7,7 +7,7 @@
           content="<?php echo $pageTitle . ' Удобное расположение. Центр гоpoда. Транспортная доступность. Хороший пeшeхoдный трафик. 
           Собственная парковка. Качественный ремонт. Кондиционеры в каждом кабинете. Светодиодное освещение. Охрана и круглосуточный доступ. 
           Предоставляем офисную мебель при необходимости. Сдача помещений по этажам или полностью всего здания.'; ?>">
-    <title><?php echo 'Офисное здание г. Кемерово, ул. Кузбасская, 33А. ' . $pageTitle; ?></title>
+    <title><?= $pageTitle ?? 'Офисное здание г. Кемерово' ?></title>
     <link rel="stylesheet" href="<?= asset('/css/main.css') ?>">
     <link rel="stylesheet" href="<?= asset('/css/bootstrap.min.css') ?>">
     <link rel="icon" href="/favicon.svg">
@@ -27,22 +27,22 @@
             </button>
             <div class="bottom-header collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav primary-menu">
-                    <li class="<?php echo $currentPage === 'home' ? 'active' : ''; ?>">
+                    <li class="<?= ($currentPage ?? '') === 'home' ? 'active' : '' ?>">
                         <a href="<?= url() ?>">Главная</a>
                     </li>
-                    <li class="<?php echo $currentPage === 'floor1' ? 'active' : ''; ?>">
+                    <<li class="<?= ($currentPage ?? '') === 'floor1' ? 'active' : ''; ?>">
                         <a href="<?= url('/floor?id=1') ?>">Первый этаж</a>
                     </li>
-                    <li class="<?php echo $currentPage === 'floor2' ? 'active' : ''; ?>">
+                    <li class="<?= ($currentPage ?? '') === 'floor2' ? 'active' : ''; ?>">
                         <a href="<?= url('/floor?id=2') ?>">Второй этаж</a>
                     </li>
-                    <li class="<?php echo $currentPage === 'floor3' ? 'active' : ''; ?>">
+                    <li class="<?= ($currentPage ?? '') === 'floor3' ? 'active' : ''; ?>">
                         <a href="<?= url('/floor?id=3') ?>">Третий этаж</a>
                     </li>
-                    <li class="<?php echo $currentPage === 'schema' ? 'active' : ''; ?>">
+                    <li class="<?= ($currentPage ?? '') === 'schema' ? 'active' : ''; ?>">
                         <a href="<?= url('/schema') ?>">Схема расположения</a>
                     </li>
-                    <li class="<?php echo $currentPage === 'form-send-message' ? 'active' : ''; ?>">
+                    <li class="<?= ($currentPage ?? '') === 'form-send-message' ? 'active' : ''; ?>">
                         <a href="<?= url('/form-send-message') ?>">Отправить сообщение</a>
                     </li>
                 </ul>

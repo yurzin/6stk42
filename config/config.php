@@ -4,7 +4,7 @@ define("ROOT", dirname(__DIR__));
 const WWW = ROOT . '/public';
 const CONFIG = ROOT . '/config';
 const APP = ROOT . '/app';
-const CONTROLLERS = APP . '/Controllers';
+const CONTROLLERS = APP . '/Controllers/View';
 
 const VIEWS = APP . '/Views';
 const VENDOR = ROOT . '/vendor';
