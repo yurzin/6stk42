@@ -35,7 +35,7 @@ abstract class BaseModel
     public function count(): int
     {
         $stmt = $this->db->query(
-            "SELECT COUNT(*) FROM {$this->table} WHERE deleted_at IS NULL"
+            "SELECT COUNT(*) FROM {$this->table} WHERE deleted_at IS NULL" // Добавлено условие
         );
         return (int) $stmt->fetchColumn();
     }

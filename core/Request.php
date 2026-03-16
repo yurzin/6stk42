@@ -25,14 +25,14 @@ class Request
 
     protected function parseUri(): void
     {
-        $parts = explode('?', $this->uri, 2);
-        $this->path = trim($parts[0], '/');
+        $parts      = explode('?', $this->rawUri, 2);
+        $this->path = trim(urldecode($parts[0]), '/');
 
-        // Если есть query строка
         if (isset($parts[1])) {
-            parse_str($parts[1], $this->queryParams);
-            // Объединяем с $_GET на случай, если там уже были параметры
-            $this->queryParams = array_merge($this->queryParams, $_GET);
+            parse_str($parts[1], $fromUri);
+            $this->queryParams = $fromUri;
+        } else {
+            $this->queryParams = $_GET;
         }
     }
 
@@ -56,7 +56,7 @@ class Request
         return $this->queryParams[$name] ?? $default;
     }
 
-    public function post($name, $default = null): ?string
+    public function getPost($name, $default = null): ?string
     {
         return $this->post[$name] ?? $default;
     }

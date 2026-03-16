@@ -1,6 +1,9 @@
 .env
 .env.localold
 backend/vendor/
+node_modules/
+data/mysql/
+data/mysql_data/
 composer.lock
 .DS_Store
 *.log

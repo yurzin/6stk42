@@ -1,9 +1,9 @@
 <script setup>
 import { defineAsyncComponent } from 'vue'
-import AppHeader from '../Сomponents/AppHeader.vue'
-import HeroSection from '../Сomponents/HeroSection.vue'
-import StatsBar from '../Сomponents/StatsBar.vue'
-import MediaFeed from '../Сomponents/MediaFeed.vue'
+import AppHeader from '../Components/AppHeader.vue'
+import HeroSection from '../Components/HeroSection.vue'
+import StatsBar from '../Components/StatsBar.vue'
+import MediaFeed from '../Components/MediaFeed.vue'
 import { useMediaFeed } from '../composables/useMediaFeed.js'
 import { useFormatDate } from '../composables/useFormatDate.js'
 

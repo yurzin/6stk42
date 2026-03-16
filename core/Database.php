@@ -54,7 +54,10 @@ class Database
     {
         if (self::$instance === null) {
             if (empty($config)) {
-                throw new \InvalidArgumentException('Database configuration is required for first initialization');
+                throw new \LogicException(
+                    'Database has not been initialised yet. ' .
+                    'Call Database::getInstance($config) in your bootstrap file first.'
+                );
             }
             self::$instance = new self($config);
         }

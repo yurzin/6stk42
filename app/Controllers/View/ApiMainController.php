@@ -7,6 +7,7 @@ namespace App\Controllers\View;
 use App\Models\Photo;
 use App\Models\Video;
 use App\Models\Note;
+use core\Request;
 
 /**
  * MainController — главный контроллер API.
@@ -35,10 +36,9 @@ class ApiMainController
     // ------------------------------------------------------------------ //
 
     /** GET /api/feed */
-    public function feed(): void
+    public function feed(Request $request): void
     {
-        $limit  = $this->queryInt('limit', 20, 1, 100);
-        $offset = $this->queryInt('offset', 0, 0);
+        [$limit, $offset] = $this->pagination($request);
 
         $photos = $this->photos->findAll($limit, $offset);
         $videos = $this->videos->findAll($limit, $offset);
@@ -46,12 +46,13 @@ class ApiMainController
 
         // Объединяем и сортируем по дате
         $items = array_merge($photos, $videos, $notes);
-        usort($items, static fn($a, $b) => strcmp($b['created_at'], $a['created_at']));
+        usort($items, fn($a, $b) => strtotime($b['created_at']) <=> strtotime($a['created_at']));
+        $items = array_slice($items, $offset, $limit);
 
         $this->json([
             'data' => array_values(array_slice($items, 0, $limit)),
             'meta' => [
-                'total'  => count($items),
+                'total' => $this->photos->count() + $this->videos->count() + $this->notes->count(),
                 'limit'  => $limit,
                 'offset' => $offset,
                 'counts' => [
@@ -64,9 +65,9 @@ class ApiMainController
     }
 
     /** GET /api/photos */
-    public function photos(): void
+    public function photos(Request $request): void
     {
-        [$limit, $offset] = $this->pagination();
+        [$limit, $offset] = $this->pagination($request);
 
         $this->json([
             'data' => $this->photos->findAll($limit, $offset),
@@ -75,9 +76,9 @@ class ApiMainController
     }
 
     /** GET /api/videos */
-    public function videos(): void
+    public function videos(Request $request): void
     {
-        [$limit, $offset] = $this->pagination();
+        [$limit, $offset] = $this->pagination($request);
 
         $this->json([
             'data' => $this->videos->findAll($limit, $offset),
@@ -86,9 +87,9 @@ class ApiMainController
     }
 
     /** GET /api/notes */
-    public function notes(): void
+    public function notes(Request $request): void
     {
-        [$limit, $offset] = $this->pagination();
+        [$limit, $offset] = $this->pagination($request);
 
         $this->json([
             'data' => $this->notes->findAll($limit, $offset),
@@ -100,11 +101,11 @@ class ApiMainController
     //  Хелперы
     // ------------------------------------------------------------------ //
 
-    private function pagination(): array
+    private function pagination(Request $request): array
     {
         return [
-            $this->queryInt('limit', 20, 1, 100),
-            $this->queryInt('offset', 0, 0),
+            $this->queryInt($request, 'limit',  20, 1, 100),
+            $this->queryInt($request, 'offset',  0, 0),
         ];
     }
 
@@ -118,9 +119,14 @@ class ApiMainController
         ];
     }
 
-    private function queryInt(string $key, int $default, int $min = 0, int $max = PHP_INT_MAX): int
-    {
-        $val = isset($_GET[$key]) ? (int) $_GET[$key] : $default;
+    private function queryInt(
+        Request $request,
+        string  $key,
+        int     $default,
+        int     $min = 0,
+        int     $max = PHP_INT_MAX
+    ): int {
+        $val = $request->getInt($key, $default);
         return max($min, min($max, $val));
     }
 

@@ -10,10 +10,6 @@ export default defineConfig({
         strictPort: false,
         allowedHosts: true,
         cors: true,
-        hmr: {
-            host: '6sotok42.local',
-            port: 5173,
-        },
         watch: {
             usePolling: true,
             interval: 100
