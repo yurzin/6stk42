@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace core;
 
 class Request
@@ -8,19 +10,33 @@ class Request
     public string $rawUri;
     public string $path;
     public array $post;
-    public array $get;
+
+    /**
+     * Query-параметры, разобранные из URI.
+     * Единственный источник истины для GET-параметров.
+     * Поле $get удалено — оно дублировало $queryParams и могло расходиться с ним.
+     */
     public array $queryParams;
 
-    public function __construct($uri)
+    public function __construct(string $uri)
     {
         $this->rawUri = $uri;
-        $this->uri = trim(urldecode($uri), '/');
-        $this->post = $_POST;
-        $this->get = $_GET;
-        $this->queryParams = $_GET;
+        $this->uri    = trim(urldecode($uri), '/');
+        $this->post   = $_POST;
 
-        // Разбираем URI на путь и query параметры
         $this->parseUri();
+    }
+
+    public function json(): array
+    {
+        $raw = file_get_contents('php://input');
+        return json_decode($raw, true) ?? [];
+    }
+
+    public function header(string $name): ?string
+    {
+        $key = 'HTTP_' . strtoupper(str_replace('-', '_', $name));
+        return $_SERVER[$key] ?? null;
     }
 
     protected function parseUri(): void
@@ -43,22 +59,24 @@ class Request
 
     public function isGet(): bool
     {
-        return $this->getMethod() == 'GET';
+        return $this->getMethod() === 'GET';
     }
 
     public function isPost(): bool
     {
-        return $this->getMethod() == 'POST';
+        return $this->getMethod() === 'POST';
     }
 
-    public function get($name, $default = null): ?string
+    public function get(string $name, mixed $default = null): ?string
     {
-        return $this->queryParams[$name] ?? $default;
+        $value = $this->queryParams[$name] ?? $default;
+        return $value !== null ? (string) $value : null;
     }
 
-    public function getPost($name, $default = null): ?string
+    public function getPost(string $name, mixed $default = null): ?string
     {
-        return $this->post[$name] ?? $default;
+        $value = $this->post[$name] ?? $default;
+        return $value !== null ? (string) $value : null;
     }
 
     public function getPath(): string
@@ -71,20 +89,14 @@ class Request
         return $this->queryParams;
     }
 
-    public function hasGet($name): bool
+    public function hasGet(string $name): bool
     {
         return isset($this->queryParams[$name]);
     }
 
-    public function getInt($name, $default = 0): int
+    public function getInt(string $name, int $default = 0): int
     {
         $value = $this->get($name);
-        return $value !== null ? (int)$value : $default;
+        return $value !== null ? (int) $value : $default;
     }
-
-    protected function removeQueryString(): string
-    {
-        return $this->path;
-    }
-
 }

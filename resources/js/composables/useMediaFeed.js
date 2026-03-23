@@ -9,12 +9,12 @@ export function useMediaFeed() {
   const loading     = ref(false)
   const loadingMore = ref(false)
   const error       = ref(null)
-  const activeTab   = ref('feed')
+  const activeTab   = ref('index')
   const offset      = ref(0)
 
   const endpoint = computed(() => {
-    const map = { feed: '/feed', photo: '/photos', video: '/videos', note: '/notes' }
-    return API_BASE + (map[activeTab.value] ?? '/feed')
+    const map = { index: '/index', photo: '/photos', video: '/videos', note: '/notes' }
+    return API_BASE + (map[activeTab.value] ?? '/index')
   })
 
   async function fetchData(append = false) {

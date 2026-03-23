@@ -5,62 +5,56 @@
 
 <template>
   <section class="hero">
-    <p class="hero-eyebrow">Your personal media hub</p>
+    <p class="hero-eyebrow">Мой личный медиа-центр</p>
     <h1 class="hero-title">
-      All your <em>content</em>,<br>in one place.
+      Весь мой <em>контент</em>,<br>в одном месте.
     </h1>
     <p class="hero-sub">
-      Photos, videos, and notes — unified, searchable, beautifully presented.
+      Фотографии, видео и заметки — в едином формате, с возможностью поиска, в красивом оформлении.
     </p>
   </section>
 </template>
 
 <style scoped>
 .hero {
-  text-align: center;
-  padding: 4rem 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  padding: 52px 28px 40px;
+  background: var(--color-ink);
+  border-bottom: 1px solid var(--color-ink-3);
 }
 
 .hero-eyebrow {
-  font-size: 1rem;
+  font-size: 10px;
+  letter-spacing: 3px;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 1rem;
-  opacity: 0.9;
+  color: var(--color-gold);
+  margin-bottom: 16px;
+  font-weight: 500;
 }
 
 .hero-title {
-  font-size: 3.5rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  line-height: 1.2;
+  font-family: var(--font-serif);
+  font-size: 3rem;
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--color-sand);
+  max-width: 540px;
+  margin-bottom: 16px;
 }
 
 .hero-title em {
+  color: var(--color-gold);
   font-style: italic;
-  color: #ffd700;
 }
 
 .hero-sub {
-  font-size: 1.25rem;
-  max-width: 600px;
-  margin: 0 auto;
-  opacity: 0.9;
+  font-size: 14px;
+  color: var(--color-muted);
+  max-width: 380px;
+  line-height: 1.65;
 }
 
-@media (max-width: 768px) {
-  .hero {
-    padding: 3rem 1.5rem;
-  }
-
-  .hero-title {
-    font-size: 2.5rem;
-  }
-
-  .hero-sub {
-    font-size: 1.1rem;
-  }
+@media (max-width: 640px) {
+  .hero { padding: 36px 16px 28px; }
+  .hero-title { font-size: 2.1rem; }
 }
 </style>

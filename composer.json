@@ -7,19 +7,21 @@
   },
   "scripts": {
     "post-install-cmd": [
-      "cp -r backend/vendor/twbs/bootstrap/dist/css/bootstrap.min.css public/css/",
-      "cp -r backend/vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js public/js/"
+      "cp -r vendor/twbs/bootstrap/dist/css/bootstrap.min.css public/css/",
+      "cp -r vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js public/js/"
     ],
     "post-update-cmd": [
-      "cp -r backend/vendor/twbs/bootstrap/dist/css/bootstrap.min.css public/css/",
-      "cp -r backend/vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js public/js/"
+      "cp -r vendor/twbs/bootstrap/dist/css/bootstrap.min.css public/css/",
+      "cp -r vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js public/js/"
     ]
   },
     "require": {
         "phpmailer/phpmailer": "^7.0",
         "vlucas/phpdotenv": "^5.6",
         "twbs/bootstrap": "*",
-      "ext-pdo": "*"
+      "ext-pdo": "*",
+    "firebase/php-jwt": "^7.0",
+    "paragonie/sodium_compat": "^2.5"
     },
   "require-dev": {
     "symfony/var-dumper": "*"

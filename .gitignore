@@ -1,6 +1,5 @@
 .env
 .env.localold
-backend/vendor/
 node_modules/
 data/mysql/
 data/mysql_data/
@@ -14,3 +13,4 @@ composer.lock
 /public/img/floor2
 /public/img/floor3
 /public/img/schema
+vendor/

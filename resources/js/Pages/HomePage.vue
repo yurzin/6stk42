@@ -9,7 +9,7 @@ import { useFormatDate } from '../composables/useFormatDate.js'
 
 // ── Константы страницы ─────────────────────────────────────────────────────
 const TABS = [
-  { key: 'feed',  label: 'All' },
+  { key: 'index',  label: 'All' },
   { key: 'photo', label: 'Photos' },
   { key: 'video', label: 'Videos' },
   { key: 'note',  label: 'Notes' },
@@ -34,6 +34,7 @@ const {
 </script>
 
 <template>
+
   <div>
     <AppHeader
         :tabs="TABS"

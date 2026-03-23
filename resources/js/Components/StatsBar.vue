@@ -3,48 +3,41 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  meta: {
-    type: Object,
-    default: null
-  }
+  meta: { type: Object, default: null }
 })
 
-// Вычисляемое свойство для проверки наличия данных
-const hasStats = computed(() => {
-  return props.meta?.counts && Object.keys(props.meta.counts).length > 0
-})
+const hasStats = computed(() =>
+  props.meta?.counts && Object.keys(props.meta.counts).length > 0
+)
 
-// Статистика с значениями по умолчанию
 const stats = computed(() => ({
   photos: props.meta?.counts?.photos || 0,
   videos: props.meta?.counts?.videos || 0,
-  notes: props.meta?.counts?.notes || 0
+  notes:  props.meta?.counts?.notes  || 0,
 }))
 </script>
 
 <template>
-  <div class="stats-bar" v-if="hasStats">
+  <div v-if="hasStats" class="stats-bar">
     <div class="stat">
-      <div class="stat-icon photo">📷</div>
+      <span class="stat-dot photo" aria-hidden="true"></span>
       <div>
-        <div class="stat-val">{{ stats.photos }}</div>
-        <div class="stat-lbl">Photos</div>
+        <div class="stat-num">{{ stats.photos }}</div>
+        <div class="stat-label">Photos</div>
       </div>
     </div>
-
     <div class="stat">
-      <div class="stat-icon video">🎬</div>
+      <span class="stat-dot video" aria-hidden="true"></span>
       <div>
-        <div class="stat-val">{{ stats.videos }}</div>
-        <div class="stat-lbl">Videos</div>
+        <div class="stat-num">{{ stats.videos }}</div>
+        <div class="stat-label">Videos</div>
       </div>
     </div>
-
     <div class="stat">
-      <div class="stat-icon note">📝</div>
+      <span class="stat-dot note" aria-hidden="true"></span>
       <div>
-        <div class="stat-val">{{ stats.notes }}</div>
-        <div class="stat-lbl">Notes</div>
+        <div class="stat-num">{{ stats.notes }}</div>
+        <div class="stat-label">Notes</div>
       </div>
     </div>
   </div>
@@ -53,70 +46,57 @@ const stats = computed(() => ({
 <style scoped>
 .stats-bar {
   display: flex;
-  justify-content: center;
-  gap: 3rem;
-  padding: 2rem;
-  background: white;
-  border-bottom: 1px solid #eee;
+  background: var(--color-ink);
+  border-bottom: 1px solid var(--color-ink-3);
 }
 
 .stat {
+  flex: 1;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 12px;
+  padding: 20px 28px;
+  border-right: 1px solid var(--color-ink-3);
 }
 
-.stat-icon {
-  font-size: 2rem;
-  line-height: 1;
+.stat:last-child {
+  border-right: none;
 }
 
-.stat-val {
-  font-size: 1.5rem;
+.stat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.stat-dot.photo { background: var(--color-type-photo); }
+.stat-dot.video { background: var(--color-type-video); }
+.stat-dot.note  { background: var(--color-type-note);  }
+
+.stat-num {
+  font-size: 22px;
   font-weight: 600;
-  color: #333;
-  line-height: 1.2;
+  color: var(--color-sand);
+  line-height: 1;
+  animation: fadeUp 0.4s ease-out both;
 }
 
-.stat-lbl {
-  font-size: 0.875rem;
-  color: #666;
+.stat-label {
+  font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
+  color: var(--color-muted);
+  margin-top: 3px;
 }
 
-/* Анимация при загрузке */
-.stat-val {
-  animation: countUp 0.5s ease-out;
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes countUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (max-width: 768px) {
-  .stats-bar {
-    gap: 1.5rem;
-    padding: 1.5rem;
-  }
-
-  .stat-icon {
-    font-size: 1.5rem;
-  }
-
-  .stat-val {
-    font-size: 1.25rem;
-  }
-
-  .stat-lbl {
-    font-size: 0.75rem;
-  }
+@media (max-width: 640px) {
+  .stat { padding: 16px; gap: 8px; }
+  .stat-num { font-size: 18px; }
 }
 </style>

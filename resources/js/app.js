@@ -1,5 +1,9 @@
-import { createApp } from 'vue'
-import HomePage from './Pages/HomePage.vue'
+import { createApp } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router';
+import App from './App.vue'
+import router from './router'
+import '../css/theme.css'
+import '../css/card-row.css'
 
 // Фоллбэк для dev-режима (когда PHP не работает)
 window.__APP_CONFIG__ = window.__APP_CONFIG__ || {
@@ -8,4 +12,4 @@ window.__APP_CONFIG__ = window.__APP_CONFIG__ || {
     version: '1.0.0',
 }
 
-createApp(HomePage).mount('#app')
+createApp(App).use(router).mount('#app')

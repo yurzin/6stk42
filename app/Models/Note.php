@@ -9,6 +9,7 @@ use PDO;
 class Note extends BaseModel
 {
     protected string $table = 'notes';
+    protected function table(): Table { return Table::Notes; }
 
     /**
      * CREATE TABLE notes (

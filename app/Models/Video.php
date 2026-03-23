@@ -9,6 +9,7 @@ use PDO;
 class Video extends BaseModel
 {
     protected string $table = 'videos';
+    protected function table(): Table { return Table::Videos; }
 
     public function findAll(int $limit = 20, int $offset = 0): array
     {
