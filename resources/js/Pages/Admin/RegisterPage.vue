@@ -19,7 +19,7 @@ async function submit() {
   resetErrors()
   loading.value = true
   try {
-    const res  = await fetch(`${window.__APP_CONFIG__.apiBase}/admin/register`, {
+    const res  = await fetch(`${window.__APP_CONFIG__.apiBase}/register`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify(form),
